@@ -1,0 +1,15 @@
+sudo docker run -it ubuntu:20.04
+
+    apt update
+
+    apt install python3.8 python3.8-dev python3-pip wget -y
+
+    pip3 install requests
+
+    pip3 install beautifulsoup4
+
+    exit
+
+sudo docker commit (id do container obtido em sudo docker ps -a) webscrapping-python
+
+sudo docker save webscrapping-python > webscrapping-python.tar

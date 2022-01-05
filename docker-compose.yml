@@ -1,0 +1,20 @@
+version: '3.5'
+
+services:
+
+  #nome do servico
+  webscrapping-python:
+
+    #construido a partir de uma imagem customizada em ./image
+    image: webscrapping-python
+    
+    #nome do conteiner
+    container_name: webscrapping-python
+
+    #pastas compartilhadas
+    volumes:
+      #pasta do codigo fonte da aplicacao
+      - "./app:/root"
+  
+    #artifício para manter o container aberto
+    tty: true
