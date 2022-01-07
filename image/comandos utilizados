@@ -2,7 +2,9 @@ sudo docker run -it ubuntu:20.04
 
     apt update
 
-    apt install python3.8 python3.8-dev python3-pip wget -y
+    apt install python3.8 python3.8-dev python3-pip wget imagemagick -y
+
+    sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
     pip3 install requests
 
