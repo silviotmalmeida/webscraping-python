@@ -6,11 +6,17 @@ from bs4 import BeautifulSoup  # biblioteca de tratamento de html
 import subprocess  # biblioteca de comandos do sistema
 import os  # biblioteca de manipulação de pastas
 import shutil  # biblioteca de manipulação de pastas
+import re  # biblioteca de expressões regulares
+
 
 # url principal do mangá na Union Mangás
 # main_url = 'http://unionleitor.top/manga/noblesse'
-main_url = 'http://unionleitor.top/pagina-manga/shingeki-no-kyojin'
+# main_url = 'http://unionleitor.top/pagina-manga/shingeki-no-kyojin'
 # main_url = 'http://unionleitor.top/pagina-manga/solo-leveling'
+# main_url = 'http://unionleitor.top/pagina-manga/kimetsu-no-yaiba'
+# main_url = 'http://unionleitor.top/manga/the-beginning-after-the-end'
+# main_url = 'http://unionleitor.top/manga/the-beginning-after-the-end-novel'
+main_url = 'http://unionleitor.top/pagina-manga/the-promised-neverland'
 
 # obtendo a pasta do projeto
 project_folder = os.path.dirname(os.path.realpath(__file__))
@@ -51,7 +57,8 @@ try:
         if 'Cap. ' in url.text:
 
             # nomeando a pasta do capítulo a partir do texto da tag
-            chapter_folder = float(url.text[5:])
+            # chapter_folder = float(url.text[5:])
+            chapter_folder = (url.text[5:]).zfill(9)
 
             # obtendo o url do capítulo a partir do atributo href
             chapter_url = url.get('href')
@@ -60,11 +67,15 @@ try:
             folder_url[chapter_folder] = chapter_url
 
     # percorrendo o dicionário ordenado pelo capítulo
-    for chapter_folder, chapter_url in sorted(folder_url.items()):
+    for chapter_folder, chapter_url in reversed(folder_url.items()):
+
+        # obtendo o valor numérico do capítulo
+        chapter_number = float(re.sub(r'[^0-9.]', '', chapter_folder))
+        # print(chapter_number, chapter_folder)
 
         # se o número da capítulo estiver entre o intervalo especificado, prossegue
-        if chapter_folder >= initial_chapter and chapter_folder <= final_chapter:
-
+        if chapter_number >= initial_chapter and chapter_number <= final_chapter:
+            
             # fazendo a requisição na url do capítulo
             response = requests.get(chapter_url)
 
@@ -89,8 +100,8 @@ try:
                 # obtendo a url da imagem a partir do atributo src
                 image_url = image.get('src')
 
-                # definindo a página da imagem a partir do atributo pag, e configurando com 3 dígitos
-                image_page = image.get('pag').zfill(3)
+                # definindo a página da imagem a partir do atributo pag, e configurando com 9 dígitos
+                image_page = image.get('pag').zfill(9)
 
                 # utilizando o wget para realizar o download da imagem
                 subprocess.call(
