@@ -1,3 +1,5 @@
+# script com função de baixar mangás no site unionleitor.top
+
 # importando as dependências
 import requests  # biblioteca de requisições http
 from bs4 import BeautifulSoup  # biblioteca de tratamento de html
@@ -6,7 +8,9 @@ import os  # biblioteca de manipulação de pastas
 import shutil  # biblioteca de manipulação de pastas
 
 # url principal do mangá na Union Mangás
-main_url = 'http://unionleitor.top/manga/noblesse'
+# main_url = 'http://unionleitor.top/manga/noblesse'
+main_url = 'http://unionleitor.top/pagina-manga/shingeki-no-kyojin'
+# main_url = 'http://unionleitor.top/pagina-manga/solo-leveling'
 
 # obtendo a pasta do projeto
 project_folder = os.path.dirname(os.path.realpath(__file__))
@@ -18,7 +22,7 @@ files_folder = 'files'
 initial_chapter = 1
 
 # definindo o capítulo final a ser baixado
-final_chapter = 9999
+final_chapter = 1
 
 # tratamento de exceções
 try:
@@ -63,6 +67,11 @@ try:
 
             # fazendo a requisição na url do capítulo
             response = requests.get(chapter_url)
+
+            # se a requisição não retornar dados, lança uma exceção
+            if not 200 == response.status_code:
+                raise Exception
+
             # tratando o html recebido
             html = BeautifulSoup(response.text, 'html.parser')
 
@@ -88,12 +97,17 @@ try:
                     f"wget -O '{project_folder}/{files_folder}/{chapter_folder}/{image_page}' '{image_url}'", shell=True)
 
             # utilizando o imagemagick para realizar converter o capítulo em pdf
+            print(f'Convertendo {chapter_folder}.pdf.\n')
             subprocess.call(
                 f"cd '{project_folder}/{files_folder}/{chapter_folder}/'; convert * '{chapter_folder}.pdf'", shell=True)
 
             # movendo o capítulo em pdf para a pasta de arquivos
             subprocess.call(
                 f"mv '{project_folder}/{files_folder}/{chapter_folder}/{chapter_folder}.pdf' '{project_folder}/{files_folder}/{chapter_folder}.pdf'", shell=True)
+
+            # apagando a pasta com as imagens
+            subprocess.call(
+                f"rm -rf '{project_folder}/{files_folder}/{chapter_folder}/'", shell=True)
 
 # em caso de erro:
 except Exception as error:
