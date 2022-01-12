@@ -6,6 +6,10 @@ sudo docker run -it ubuntu:20.04
 
     sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
+    sed -i 's/name="width" value="16KP/name="width" value="32KP/g' /etc/ImageMagick-6/policy.xml
+
+    sed -i 's/name="height" value="16KP/name="height" value="32KP/g' /etc/ImageMagick-6/policy.xml
+
     pip3 install requests
 
     pip3 install beautifulsoup4

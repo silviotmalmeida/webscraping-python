@@ -11,12 +11,12 @@ import re  # biblioteca de expressões regulares
 
 # url principal do mangá na Union Mangás
 # main_url = 'http://unionleitor.top/manga/noblesse'
-# main_url = 'http://unionleitor.top/pagina-manga/shingeki-no-kyojin'
 # main_url = 'http://unionleitor.top/pagina-manga/solo-leveling'
 # main_url = 'http://unionleitor.top/pagina-manga/kimetsu-no-yaiba'
+main_url = 'http://unionleitor.top/pagina-manga/shingeki-no-kyojin'
+# main_url = 'http://unionleitor.top/pagina-manga/the-promised-neverland'
 # main_url = 'http://unionleitor.top/manga/the-beginning-after-the-end'
 # main_url = 'http://unionleitor.top/manga/the-beginning-after-the-end-novel'
-main_url = 'http://unionleitor.top/pagina-manga/the-promised-neverland'
 
 # obtendo a pasta do projeto
 project_folder = os.path.dirname(os.path.realpath(__file__))
@@ -25,10 +25,10 @@ project_folder = os.path.dirname(os.path.realpath(__file__))
 files_folder = 'files'
 
 # definindo o capítulo inicial a ser baixado
-initial_chapter = 1
+initial_chapter = 51
 
 # definindo o capítulo final a ser baixado
-final_chapter = 1
+final_chapter = 9999
 
 # tratamento de exceções
 try:
@@ -42,6 +42,7 @@ try:
 
     # se a requisição não retornar dados, lança uma exceção
     if not 200 == response.status_code:
+        print(f'Falha na requisição, código {response.status_code}')
         raise Exception
 
     # tratando o html recebido
@@ -75,12 +76,13 @@ try:
 
         # se o número da capítulo estiver entre o intervalo especificado, prossegue
         if chapter_number >= initial_chapter and chapter_number <= final_chapter:
-            
+
             # fazendo a requisição na url do capítulo
             response = requests.get(chapter_url)
 
             # se a requisição não retornar dados, lança uma exceção
             if not 200 == response.status_code:
+                print(f'Falha na requisição, código {response.status_code}')
                 raise Exception
 
             # tratando o html recebido
@@ -95,6 +97,14 @@ try:
             os.mkdir(f'{project_folder}/{files_folder}/{chapter_folder}')
 
             # coletando todas as tag <img> da url do capítulo
+            images = html.select('img')
+
+            # se forem encontradas poucas imagens, lança uma exceção
+            if len(images) < 10:
+                print(f'Quantidade de imagens({len(images)}) menor que 10')
+                raise Exception
+
+            # coletando todas as tag <img> da url do capítulo
             for image in html.select('img'):
 
                 # obtendo a url da imagem a partir do atributo src
@@ -104,27 +114,51 @@ try:
                 image_page = image.get('pag').zfill(9)
 
                 # utilizando o wget para realizar o download da imagem
-                subprocess.call(
+                cmd = subprocess.run(
                     f"wget -O '{project_folder}/{files_folder}/{chapter_folder}/{image_page}' '{image_url}'", shell=True)
+
+                # se ocorrer um erro, lança uma exceção
+                if cmd.returncode != 0:
+                    print(f'Erro baixando a imagem {image_url}')
+                    raise Exception
 
             # utilizando o imagemagick para realizar converter o capítulo em pdf
             print(f'Convertendo {chapter_folder}.pdf.\n')
-            subprocess.call(
+            cmd = subprocess.run(
                 f"cd '{project_folder}/{files_folder}/{chapter_folder}/'; convert * '{chapter_folder}.pdf'", shell=True)
 
+            # se ocorrer um erro, lança uma exceção
+            if cmd.returncode != 0:
+                print(f'Erro convertendo o capítulo {chapter_folder}')
+                raise Exception
+
             # movendo o capítulo em pdf para a pasta de arquivos
-            subprocess.call(
+            print(f'Movendo {chapter_folder}.pdf.\n')
+            cmd = subprocess.run(
                 f"mv '{project_folder}/{files_folder}/{chapter_folder}/{chapter_folder}.pdf' '{project_folder}/{files_folder}/{chapter_folder}.pdf'", shell=True)
 
+            # se ocorrer um erro, lança uma exceção
+            if cmd.returncode != 0:
+                print(f'Erro movendo o capítulo {chapter_folder}')
+                raise Exception
+
             # apagando a pasta com as imagens
-            subprocess.call(
+            print(f'Apagando a pasta {chapter_folder}.\n')
+            cmd = subprocess.run(
                 f"rm -rf '{project_folder}/{files_folder}/{chapter_folder}/'", shell=True)
+
+            # se ocorrer um erro, lança uma exceção
+            if cmd.returncode != 0:
+                print(f'Erro apagando a pasta {project_folder}/{files_folder}/{chapter_folder}')
+                raise Exception
+
+            print(f'Arquivo {chapter_folder}.pdf pronto.\n')
 
 # em caso de erro:
 except Exception as error:
 
     # exibe a mensagem
-    print(f"Ocorreu um erro: {error}")
+    print(f"Ocorreu um erro. {error}")
 
     # encerra a execução do script
     exit()
