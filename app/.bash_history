@@ -28,3 +28,16 @@ exit
 cd /etc/ImageMagick-6/
 vim policy.xml 
 exit
+pip3 install pillow
+exit
+apt install vim
+apt install vim
+cd /etc/ImageMagick-6/
+vim policy.xml 
+exit
+cd /etc/ImageMagick-6/
+vim policy.xml 
+exit
+cd /etc/ImageMagick-6/
+vim policy.xml 
+exit

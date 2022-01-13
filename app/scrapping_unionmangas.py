@@ -7,6 +7,7 @@ import subprocess  # biblioteca de comandos do sistema
 import os  # biblioteca de manipulação de pastas
 import shutil  # biblioteca de manipulação de pastas
 import re  # biblioteca de expressões regulares
+from PIL import Image
 
 
 # url principal do mangá na Union Mangás
@@ -25,10 +26,10 @@ project_folder = os.path.dirname(os.path.realpath(__file__))
 files_folder = 'files'
 
 # definindo o capítulo inicial a ser baixado
-initial_chapter = 51
+initial_chapter = 1
 
 # definindo o capítulo final a ser baixado
-final_chapter = 9999
+final_chapter = 1
 
 # tratamento de exceções
 try:
@@ -42,8 +43,7 @@ try:
 
     # se a requisição não retornar dados, lança uma exceção
     if not 200 == response.status_code:
-        print(f'Falha na requisição, código {response.status_code}')
-        raise Exception
+        raise Exception(f'Falha na requisição, código {response.status_code}')
 
     # tratando o html recebido
     html = BeautifulSoup(response.text, 'html.parser')
@@ -72,7 +72,6 @@ try:
 
         # obtendo o valor numérico do capítulo
         chapter_number = float(re.sub(r'[^0-9.]', '', chapter_folder))
-        # print(chapter_number, chapter_folder)
 
         # se o número da capítulo estiver entre o intervalo especificado, prossegue
         if chapter_number >= initial_chapter and chapter_number <= final_chapter:
@@ -82,8 +81,8 @@ try:
 
             # se a requisição não retornar dados, lança uma exceção
             if not 200 == response.status_code:
-                print(f'Falha na requisição, código {response.status_code}')
-                raise Exception
+                raise Exception(
+                    f'Falha na requisição, código {response.status_code}')
 
             # tratando o html recebido
             html = BeautifulSoup(response.text, 'html.parser')
@@ -101,8 +100,8 @@ try:
 
             # se forem encontradas poucas imagens, lança uma exceção
             if len(images) < 10:
-                print(f'Quantidade de imagens({len(images)}) menor que 10')
-                raise Exception
+                raise Exception(
+                    f'Quantidade de imagens({len(images)}) menor que 10')
 
             # coletando todas as tag <img> da url do capítulo
             for image in html.select('img'):
@@ -110,47 +109,87 @@ try:
                 # obtendo a url da imagem a partir do atributo src
                 image_url = image.get('src')
 
+                # obtendo a extensão do arquivo
+                image_extension = image_url.split('.')[-1]
+
                 # definindo a página da imagem a partir do atributo pag, e configurando com 9 dígitos
                 image_page = image.get('pag').zfill(9)
 
                 # utilizando o wget para realizar o download da imagem
                 cmd = subprocess.run(
-                    f"wget -O '{project_folder}/{files_folder}/{chapter_folder}/{image_page}' '{image_url}'", shell=True)
+                    f"wget -O '{project_folder}/{files_folder}/{chapter_folder}/{image_page}.{image_extension}' '{image_url}'", shell=True)
 
                 # se ocorrer um erro, lança uma exceção
                 if cmd.returncode != 0:
-                    print(f'Erro baixando a imagem {image_url}')
-                    raise Exception
+                    raise Exception(f'Erro baixando a imagem {image_url}')
 
-            # utilizando o imagemagick para realizar converter o capítulo em pdf
-            print(f'Convertendo {chapter_folder}.pdf.\n')
+                # abrindo a imagem original
+                old_image = Image.open(
+                    f'{project_folder}/{files_folder}/{chapter_folder}/{image_page}.{image_extension}')
+
+                # obtendo as dimensões da imagem original
+                width, height = old_image.size
+
+                # definindo o width máximo da imagem
+                new_width = 960
+
+                # se a imagem original for maior:
+                if width > new_width:
+
+                    # calcula o novo height para manter a proporção
+                    new_height = round((new_width*height)/width)
+
+                    # cria uma nova imagem redimensionada
+                    new_image = old_image.resize(
+                        (new_width, new_height), Image.LANCZOS)
+
+                # senão
+                else:
+
+                    # mantém as dimensões originais
+                    new_image = old_image
+
+                # salvando a nova imagem, otimizando a qualidade
+                new_image.save(
+                    f'{project_folder}/{files_folder}/{chapter_folder}/_{image_page}.{image_extension}',
+                    optimize=True,
+                    quality=50
+                )
+
+                # apagando a imagem original
+                cmd = subprocess.run(
+                    f"rm -rf '{project_folder}/{files_folder}/{chapter_folder}/{image_page}.{image_extension}'", shell=True)
+
+                # se ocorrer um erro, lança uma exceção
+                if cmd.returncode != 0:
+                    raise Exception(
+                        f'Erro apagando a imagem {project_folder}/{files_folder}/{chapter_folder}/{image_page}.{image_extension}')
+
+            # utilizando o imagemagick para realizar converter o capítulo em pdf            
             cmd = subprocess.run(
                 f"cd '{project_folder}/{files_folder}/{chapter_folder}/'; convert * '{chapter_folder}.pdf'", shell=True)
 
             # se ocorrer um erro, lança uma exceção
             if cmd.returncode != 0:
-                print(f'Erro convertendo o capítulo {chapter_folder}')
-                raise Exception
+                raise Exception(
+                    f'Erro convertendo o capítulo {chapter_folder}')
 
-            # movendo o capítulo em pdf para a pasta de arquivos
-            print(f'Movendo {chapter_folder}.pdf.\n')
+            # movendo o capítulo em pdf para a pasta de arquivos            
             cmd = subprocess.run(
                 f"mv '{project_folder}/{files_folder}/{chapter_folder}/{chapter_folder}.pdf' '{project_folder}/{files_folder}/{chapter_folder}.pdf'", shell=True)
 
             # se ocorrer um erro, lança uma exceção
             if cmd.returncode != 0:
-                print(f'Erro movendo o capítulo {chapter_folder}')
-                raise Exception
+                raise Exception(f'Erro movendo o capítulo {chapter_folder}')
 
-            # apagando a pasta com as imagens
-            print(f'Apagando a pasta {chapter_folder}.\n')
+            # apagando a pasta com as imagens            
             cmd = subprocess.run(
                 f"rm -rf '{project_folder}/{files_folder}/{chapter_folder}/'", shell=True)
 
             # se ocorrer um erro, lança uma exceção
             if cmd.returncode != 0:
-                print(f'Erro apagando a pasta {project_folder}/{files_folder}/{chapter_folder}')
-                raise Exception
+                raise Exception(
+                    f'Erro apagando a pasta {project_folder}/{files_folder}/{chapter_folder}')
 
             print(f'Arquivo {chapter_folder}.pdf pronto.\n')
 

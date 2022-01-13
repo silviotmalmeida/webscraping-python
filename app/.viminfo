@@ -12,13 +12,13 @@
 ~h
 # Command Line History (newest to oldest):
 :qa!
-|2,0,1641949924,,"qa!"
+|2,0,1642041382,,"qa!"
+:wq
+|2,0,1642037951,,"wq"
 :q
 |2,0,1641949893,,"q"
 :!q
 |2,0,1641949880,,"!q"
-:wq
-|2,0,1641949552,,"wq"
 
 # Search String History (newest to oldest):
 
@@ -34,16 +34,42 @@
 |3,1,36,0,1,0,1641949864,"2"
 
 # File marks:
-'0  63  43  /etc/ImageMagick-6/policy.xml
-|4,48,63,43,1641949924,"/etc/ImageMagick-6/policy.xml"
-'1  63  43  /etc/ImageMagick-6/policy.xml
-|4,49,63,43,1641949911,"/etc/ImageMagick-6/policy.xml"
-'2  63  50  /etc/ImageMagick-6/policy.xml
-|4,50,63,50,1641949553,"/etc/ImageMagick-6/policy.xml"
-'3  63  50  /etc/ImageMagick-6/policy.xml
-|4,51,63,50,1641949553,"/etc/ImageMagick-6/policy.xml"
+'0  89  11  /etc/ImageMagick-6/policy.xml
+|4,48,89,11,1642041382,"/etc/ImageMagick-6/policy.xml"
+'1  60  53  /etc/ImageMagick-6/policy.xml
+|4,49,60,53,1642037951,"/etc/ImageMagick-6/policy.xml"
+'2  60  53  /etc/ImageMagick-6/policy.xml
+|4,50,60,53,1642037951,"/etc/ImageMagick-6/policy.xml"
+'3  60  51  /etc/ImageMagick-6/policy.xml
+|4,51,60,51,1642037879,"/etc/ImageMagick-6/policy.xml"
+'4  60  51  /etc/ImageMagick-6/policy.xml
+|4,52,60,51,1642037879,"/etc/ImageMagick-6/policy.xml"
+'5  63  43  /etc/ImageMagick-6/policy.xml
+|4,53,63,43,1641949924,"/etc/ImageMagick-6/policy.xml"
+'6  63  43  /etc/ImageMagick-6/policy.xml
+|4,54,63,43,1641949924,"/etc/ImageMagick-6/policy.xml"
+'7  63  43  /etc/ImageMagick-6/policy.xml
+|4,55,63,43,1641949924,"/etc/ImageMagick-6/policy.xml"
+'8  63  43  /etc/ImageMagick-6/policy.xml
+|4,56,63,43,1641949924,"/etc/ImageMagick-6/policy.xml"
+'9  63  43  /etc/ImageMagick-6/policy.xml
+|4,57,63,43,1641949924,"/etc/ImageMagick-6/policy.xml"
 
 # Jumplist (newest first):
+-'  89  11  /etc/ImageMagick-6/policy.xml
+|4,39,89,11,1642041382,"/etc/ImageMagick-6/policy.xml"
+-'  60  53  /etc/ImageMagick-6/policy.xml
+|4,39,60,53,1642041008,"/etc/ImageMagick-6/policy.xml"
+-'  60  53  /etc/ImageMagick-6/policy.xml
+|4,39,60,53,1642037951,"/etc/ImageMagick-6/policy.xml"
+-'  60  51  /etc/ImageMagick-6/policy.xml
+|4,39,60,51,1642037879,"/etc/ImageMagick-6/policy.xml"
+-'  63  43  /etc/ImageMagick-6/policy.xml
+|4,39,63,43,1642037811,"/etc/ImageMagick-6/policy.xml"
+-'  63  43  /etc/ImageMagick-6/policy.xml
+|4,39,63,43,1642037811,"/etc/ImageMagick-6/policy.xml"
+-'  63  43  /etc/ImageMagick-6/policy.xml
+|4,39,63,43,1642037811,"/etc/ImageMagick-6/policy.xml"
 -'  63  43  /etc/ImageMagick-6/policy.xml
 |4,39,63,43,1641949924,"/etc/ImageMagick-6/policy.xml"
 -'  63  43  /etc/ImageMagick-6/policy.xml
@@ -56,13 +82,20 @@
 |4,39,1,0,1641949522,"/etc/ImageMagick-6/policy.xml"
 -'  1  0  /etc/ImageMagick-6/policy.xml
 |4,39,1,0,1641949522,"/etc/ImageMagick-6/policy.xml"
+-'  1  0  /etc/ImageMagick-6/policy.xml
+|4,39,1,0,1641949522,"/etc/ImageMagick-6/policy.xml"
+-'  1  0  /etc/ImageMagick-6/policy.xml
+|4,39,1,0,1641949522,"/etc/ImageMagick-6/policy.xml"
+-'  1  0  /etc/ImageMagick-6/policy.xml
+|4,39,1,0,1641949522,"/etc/ImageMagick-6/policy.xml"
 
 # History of marks within files (newest to oldest):
 
 > /etc/ImageMagick-6/policy.xml
-	*	1641949920	0
-	"	63	43
-	^	63	50
-	.	63	50
+	*	1642041377	0
+	"	89	11
+	^	60	54
+	.	60	53
 	+	62	50
 	+	63	50
+	+	60	53
