@@ -7,14 +7,14 @@ import subprocess  # biblioteca de comandos do sistema
 import os  # biblioteca de manipulação de pastas
 import shutil  # biblioteca de manipulação de pastas
 import re  # biblioteca de expressões regulares
-from PIL import Image
+from PIL import Image # biblioteca para tratamento de imagens
 
 
 # url principal do mangá na Union Mangás
-# main_url = 'http://unionleitor.top/manga/noblesse'
+main_url = 'http://unionleitor.top/manga/noblesse'
 # main_url = 'http://unionleitor.top/pagina-manga/solo-leveling'
 # main_url = 'http://unionleitor.top/pagina-manga/kimetsu-no-yaiba'
-main_url = 'http://unionleitor.top/pagina-manga/shingeki-no-kyojin'
+# main_url = 'http://unionleitor.top/pagina-manga/shingeki-no-kyojin'
 # main_url = 'http://unionleitor.top/pagina-manga/the-promised-neverland'
 # main_url = 'http://unionleitor.top/manga/the-beginning-after-the-end'
 # main_url = 'http://unionleitor.top/manga/the-beginning-after-the-end-novel'
@@ -26,10 +26,10 @@ project_folder = os.path.dirname(os.path.realpath(__file__))
 files_folder = 'files'
 
 # definindo o capítulo inicial a ser baixado
-initial_chapter = 1
+initial_chapter = 442
 
 # definindo o capítulo final a ser baixado
-final_chapter = 1
+final_chapter =9999
 
 # tratamento de exceções
 try:
@@ -99,9 +99,9 @@ try:
             images = html.select('img')
 
             # se forem encontradas poucas imagens, lança uma exceção
-            if len(images) < 10:
+            if len(images) < 3:
                 raise Exception(
-                    f'Quantidade de imagens({len(images)}) menor que 10')
+                    f'Quantidade de imagens({len(images)}) menor que 6')
 
             # coletando todas as tag <img> da url do capítulo
             for image in html.select('img'):
@@ -117,7 +117,7 @@ try:
 
                 # utilizando o wget para realizar o download da imagem
                 cmd = subprocess.run(
-                    f"wget -O '{project_folder}/{files_folder}/{chapter_folder}/{image_page}.{image_extension}' '{image_url}'", shell=True)
+                    f"wget -O --tries=99 '{project_folder}/{files_folder}/{chapter_folder}/{image_page}.{image_extension}' '{image_url}'", shell=True)
 
                 # se ocorrer um erro, lança uma exceção
                 if cmd.returncode != 0:
@@ -125,7 +125,7 @@ try:
 
                 # abrindo a imagem original
                 old_image = Image.open(
-                    f'{project_folder}/{files_folder}/{chapter_folder}/{image_page}.{image_extension}')
+                    f'{project_folder}/{files_folder}/{chapter_folder}/{image_page}.{image_extension}').convert('RGB')
 
                 # obtendo as dimensões da imagem original
                 width, height = old_image.size
