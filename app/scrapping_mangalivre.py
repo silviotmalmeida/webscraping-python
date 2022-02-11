@@ -22,10 +22,10 @@ project_folder = os.path.dirname(os.path.realpath(__file__))
 files_folder = 'files'
 
 # definindo o capítulo inicial a ser baixado
-initial_chapter = 15
+initial_chapter = 131
 
 # definindo o capítulo final a ser baixado
-final_chapter = 15
+final_chapter = 131
 
 # tratamento de exceções
 try:
