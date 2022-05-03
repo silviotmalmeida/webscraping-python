@@ -16,8 +16,6 @@ from PIL import Image # biblioteca para tratamento de imagens
 # main_url = 'http://unionleitor.top/pagina-manga/kimetsu-no-yaiba'
 # main_url = 'http://unionleitor.top/pagina-manga/shingeki-no-kyojin'
 main_url = 'http://unionleitor.top/pagina-manga/the-promised-neverland'
-# main_url = 'http://unionleitor.top/manga/the-beginning-after-the-end'
-# main_url = 'http://unionleitor.top/manga/the-beginning-after-the-end-novel'
 
 # obtendo a pasta do projeto
 project_folder = os.path.dirname(os.path.realpath(__file__))
@@ -26,7 +24,7 @@ project_folder = os.path.dirname(os.path.realpath(__file__))
 files_folder = 'files'
 
 # definindo o capítulo inicial a ser baixado
-initial_chapter = 144
+initial_chapter = 1
 
 # definindo o capítulo final a ser baixado
 final_chapter =9999
