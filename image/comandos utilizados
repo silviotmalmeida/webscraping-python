@@ -24,6 +24,6 @@ sudo docker run -it ubuntu:20.04
 
     exit
 
-sudo docker commit (id do container obtido em sudo docker ps -a) webscrapping-python
+sudo docker commit (id do container obtido em sudo docker ps -a) webscraping-python
 
-sudo docker save webscrapping-python > webscrapping-python.tar
+sudo docker save webscraping-python > webscraping-python.tar

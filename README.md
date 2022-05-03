@@ -1,11 +1,11 @@
 # webcrapping-python
-Webscrapping Python
+Webscraping Python
 
-Ambiente dockerizado para implementação de webscrapping
+Ambiente dockerizado para implementação de webscraping
 
 Instruções:
 
-0 - Criar e carregar a imagem docker wevscrapping-python conforme passos da pasta image;
+0 - Criar e carregar a imagem docker wevscraping-python conforme passos da pasta image;
 
 1 - Para iniciar o container, execute o comando sudo ./startContainers.sh;
 

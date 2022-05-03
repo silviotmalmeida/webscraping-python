@@ -3,13 +3,13 @@ version: '3.5'
 services:
 
   #nome do servico
-  webscrapping-python:
+  webscraping-python:
 
     #construido a partir de uma imagem customizada em ./image
-    image: webscrapping-python
+    image: webscraping-python
     
     #nome do conteiner
-    container_name: webscrapping-python
+    container_name: webscraping-python
 
     #pastas compartilhadas
     volumes:
